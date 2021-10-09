@@ -15,7 +15,19 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  
+    <script >
+        $('#exampleModalCenter').on('hidden.bs.modal', function (e) {
+        resetform();
+        })
+        function resetform() {
+            console.log("you ar eheeeeeeeeee");
+        document.querySelector('#taskname').classList.remove('is-invalid');
+        document.querySelector('#description').classList.remove('is-invalid');
+        document.querySelector('#myform').classList.remove('was-validated');
+        }
+    </script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>

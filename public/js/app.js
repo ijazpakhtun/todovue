@@ -2098,19 +2098,195 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import { defineComponent } from '@vue/composition-api'
+ // import Vuelidate from 'vuelidate'
+// Vue.use(Vuelidate);
+// import Loading from 'vue-loading-overlay';
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      //  isLoading: false,
+      //  fullPage: false,
+      //  loader: 'bars',
       tasks: [],
+      success: false,
+      errors: {},
       task: {
         title: '',
-        priority: ''
+        priority: '',
+        description: '',
+        assignedto: '',
+        status: '',
+        duedate: ''
       }
     };
   },
+  mounted: function mounted() {
+    $(this.$refs['my-modal']).on("hidden.bs.modal", this.resetfrom);
+  },
   methods: {
+    resetfrom: function resetfrom() {
+      // this.task = []
+      this.errors = [];
+      this.task.title = null;
+      this.task.description = null;
+      this.task.priority = null;
+      this.task.status = null;
+      this.task.duedate = null;
+      this.task.assignedto = null; // this.$refs['my-form'].reset();
+    },
     gettasks: function gettasks() {
       var _this = this;
 
@@ -2124,12 +2300,40 @@ __webpack_require__.r(__webpack_exports__);
     store: function store() {
       var _this2 = this;
 
+      //  this.isLoading = true;
       window.axios.post('/api/tasks', this.task).then(function (savedtask) {
-        _this2.tasks.push(savedtask.data);
+        _this2.tasks.push(savedtask.data); //  this.isLoading = false;
+
       });
     },
     remove: function remove(id) {
-      console.log("i got id : ".concat(id));
+      var _this3 = this;
+
+      //  this.isLoading = true;
+      window.axios["delete"]("/api/tasks/".concat(id)).then(function () {
+        var index = _this3.tasks.findIndex(function (task) {
+          return task.id === id;
+        });
+
+        _this3.tasks.splice(index, 1); // this.isLoading = false;
+
+      });
+    },
+    addtask: function addtask(e) {
+      var _this4 = this;
+
+      e.preventDefault();
+      window.axios.post('/api/tasks', this.task).then(function (savedtask) {
+        _this4.tasks.push(savedtask.data);
+
+        $('#exampleModalCenter').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+      })["catch"](function (error) {
+        if (error.response.status == 422) {
+          _this4.errors = error.response.data.errors;
+        }
+      });
     }
   },
   created: function created() {
@@ -2164,6 +2368,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {};
@@ -2187,6 +2420,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -2207,13 +2441,14 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js"
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var app = new Vue({
+var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
   el: '#app',
   components: {
     App: _components_App_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -37809,111 +38044,620 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "table",
-    { attrs: { className: "table" } },
-    [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("tbody"),
-      _vm._v(" "),
-      _vm._l(_vm.tasks, function(task) {
-        return _c("task-component", {
-          key: task.id,
-          attrs: { task: task },
-          on: { delete: _vm.remove }
-        })
-      }),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.task.title,
-                expression: "task.title"
-              }
-            ],
-            attrs: { type: "text", id: "task" },
-            domProps: { value: _vm.task.title },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.task, "title", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("td", [
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.task.priority,
-                  expression: "task.priority"
-                }
-              ],
-              attrs: { id: "priority", className: "form-control" },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.task,
-                    "priority",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+  return _c("section", { staticClass: "container" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _vm._m(1),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        ref: "my-modal",
+        staticClass: "modal fade",
+        attrs: {
+          id: "exampleModalCenter",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalCenterTitle",
+          "aria-hidden": "true"
+        },
+        on: { hide: _vm.resetfrom }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body p-4 py-5 p-md-5" }, [
+                _vm._m(3),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("section", { staticClass: "container" }, [
+                  _c(
+                    "form",
+                    {
+                      ref: "my-form",
+                      staticClass: "needs-validation",
+                      attrs: { novalidate: "", id: "myform" }
+                    },
+                    [
+                      _c("div", {}, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group col-md-12 col-lg-12" },
+                          [
+                            _c("label", { attrs: { for: "inputname" } }, [
+                              _vm._v("Task Name")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.task.title,
+                                  expression: "task.title"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                pattern: ".{5,10}",
+                                id: "taskname",
+                                placeholder: "Task Name",
+                                required: ""
+                              },
+                              domProps: { value: _vm.task.title },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.task,
+                                    "title",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors && _vm.errors.title
+                              ? _c(
+                                  "div",
+                                  { staticClass: "alert alert-danger" },
+                                  [
+                                    _vm._v(
+                                      "\n                          The name is required and should be of 5 to 10 characters\n                        "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group col-md-12 col-lg-12" },
+                          [
+                            _c("label", { attrs: { for: "Description" } }, [
+                              _vm._v("Description")
+                            ]),
+                            _vm._v(" "),
+                            _c("textarea", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.task.description,
+                                  expression: "task.description"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                name: "description",
+                                id: "description",
+                                placeholder: "Description of the task",
+                                required: ""
+                              },
+                              domProps: { value: _vm.task.description },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.task,
+                                    "description",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors && _vm.errors.description
+                              ? _c(
+                                  "div",
+                                  { staticClass: "alert alert-danger" },
+                                  [
+                                    _vm._v(
+                                      "\n                              " +
+                                        _vm._s(_vm.errors.description[0]) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group col-md-12 col-lg-12" },
+                          [
+                            _c("label", { attrs: { for: "Assigne" } }, [
+                              _vm._v("Assign to")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.task.assignedto,
+                                    expression: "task.assignedto"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  id: "assinedto",
+                                  name: "assinedto",
+                                  required: ""
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.task,
+                                      "assignedto",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: {
+                                      selected: "",
+                                      value: "",
+                                      disabled: ""
+                                    }
+                                  },
+                                  [_vm._v("Choose...")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("Ijaz")]),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("Nur")]),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("Zach")])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm.errors && _vm.errors.assignedto
+                              ? _c(
+                                  "div",
+                                  { staticClass: "alert alert-danger" },
+                                  [
+                                    _vm._v(
+                                      "\n                          " +
+                                        _vm._s(_vm.errors.assignedto[0]) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group col-md-12 col-lg-12 " },
+                          [
+                            _c("label", { attrs: { for: "status" } }, [
+                              _vm._v("Status")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.task.status,
+                                    expression: "task.status"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  id: "status",
+                                  name: "status",
+                                  required: ""
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.task,
+                                      "status",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: {
+                                      selected: "",
+                                      value: "",
+                                      disabled: ""
+                                    }
+                                  },
+                                  [_vm._v("Choose...")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("TODO")]),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("IN PROGRESS")]),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("REVIEW")]),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("DONE")])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm.errors && _vm.errors.status
+                              ? _c(
+                                  "div",
+                                  { staticClass: "alert alert-danger" },
+                                  [
+                                    _vm._v(
+                                      "\n                          " +
+                                        _vm._s(_vm.errors.status[0]) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group col-md-12 col-lg-12" },
+                          [
+                            _c("label", { attrs: { for: "priority" } }, [
+                              _vm._v("Priority")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.task.priority,
+                                    expression: "task.priority"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  id: "priority",
+                                  name: "priority",
+                                  required: ""
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.task,
+                                      "priority",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: {
+                                      selected: "",
+                                      value: "",
+                                      disabled: ""
+                                    }
+                                  },
+                                  [_vm._v("Choose...")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("High")]),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("Medium")]),
+                                _vm._v(" "),
+                                _c("option", [_vm._v("Low")])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm.errors && _vm.errors.priority
+                              ? _c(
+                                  "div",
+                                  { staticClass: "alert alert-danger" },
+                                  [
+                                    _vm._v(
+                                      "\n                                  " +
+                                        _vm._s(_vm.errors.priority[0]) +
+                                        "\n                                "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "form-group col-md-12 col-lg-12" },
+                          [
+                            _c("label", { attrs: { for: "duedate" } }, [
+                              _vm._v("Due Date")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.task.duedate,
+                                  expression: "task.duedate"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "date",
+                                name: "duedate",
+                                id: "duedate",
+                                required: ""
+                              },
+                              domProps: { value: _vm.task.duedate },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.task,
+                                    "duedate",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors && _vm.errors.duedate
+                              ? _c(
+                                  "div",
+                                  { staticClass: "alert alert-danger" },
+                                  [
+                                    _vm._v(
+                                      "\n                          " +
+                                        _vm._s(_vm.errors.duedate[0]) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "form-group col-md-12 col-lg-12 text-center"
+                        },
+                        [
+                          _c("div", { staticClass: "row" }, [
+                            _c("div", { staticClass: "col-md-6" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "btn btn-primary form-control col-md-8",
+                                  attrs: { type: "submit", id: "taskfrom" },
+                                  on: { click: _vm.addtask }
+                                },
+                                [_vm._v("Add Task")]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-6" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "btn btn-warning form-control col-md-8",
+                                  attrs: { type: "reset" },
+                                  on: { click: _vm.resetfrom }
+                                },
+                                [_vm._v("Reset")]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
                   )
-                }
-              }
-            },
-            [
-              _c("option", [_vm._v("Low")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("Medium")]),
-              _vm._v(" "),
-              _c("option", [_vm._v("High")])
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("td", [
-          _c("input", {
-            attrs: { type: "button", value: "Add" },
-            on: { click: _vm.store }
+                ])
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("section", { staticClass: "container" }, [
+      _c(
+        "div",
+        { staticClass: "row", attrs: { id: "tasklist" } },
+        _vm._l(_vm.tasks, function(task) {
+          return _c("task-component", {
+            key: task.id,
+            attrs: { task: task },
+            on: { delete: _vm.remove }
           })
-        ])
-      ])
-    ],
-    2
-  )
+        }),
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Task Title")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Priority")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Action")])
+    return _c("div", { staticClass: " col-lg-12 text-center" }, [
+      _c("h1", [_vm._v("TODO APP")]),
+      _vm._v(" "),
+      _c("br"),
+      _c("br")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "container" }, [
+          _c(
+            "div",
+            { staticClass: "row justify-content-center js-fullheight" },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "col-md-6 text-center d-flex align-items-center"
+                },
+                [
+                  _c("div", {}, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: {
+                          type: "button",
+                          "data-toggle": "modal",
+                          "data-target": "#exampleModalCenter"
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                          Add Task\n                        "
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ]
+          )
+        ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close d-flex align-items-center justify-content-center",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [
+          _c("span", {
+            staticClass: "ion-ios-close",
+            attrs: { "aria-hidden": "true" }
+          })
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", { staticClass: "text-center mb-3" }, [
+      _c("strong", [_vm._v("ADD A Task")])
     ])
   }
 ]
@@ -37939,20 +38683,71 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("tr", [
-    _c("td", [_vm._v(_vm._s(_vm.task.id))]),
-    _vm._v(" "),
-    _c("td", [_vm._v(_vm._s(_vm.task.title))]),
-    _vm._v(" "),
-    _c("td", [_vm._v(_vm._s(_vm.task.priority))]),
-    _vm._v(" "),
-    _c("td", [
+  return _c("div", { staticClass: "col-md-4 col-lg-4" }, [
+    _c("div", { staticClass: "card " }, [
       _c(
-        "button",
-        { attrs: { className: "btn btn-danger" }, on: { click: _vm.remove } },
-        [_vm._v("Delete")]
+        "div",
+        {
+          staticClass: "card-header  text-center",
+          class: [_vm.task.status === "Done" ? "bg-success" : ""]
+        },
+        [_c("strong", [_vm._v(_vm._s(_vm.task.name))])]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body " }, [
+        _c("p", [
+          _c("span", { staticClass: "fw-bold fs-2" }, [
+            _c("strong", [
+              _vm._v("Author Name : " + _vm._s(_vm.task.assignedto))
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("p", [
+          _c("strong", [_vm._v("Assigned To : " + _vm._s(_vm.task.assignedto))])
+        ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "card-text" }, [
+          _vm._v(_vm._s(_vm.task.description))
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-12 col-lg-12" }, [
+          _c("h5", [
+            _c("strong", [_vm._v("Due Date : " + _vm._s(_vm.task.duedate))])
+          ]),
+          _vm._v(" "),
+          _c("h5", [
+            _c("strong", [_vm._v("Priority : " + _vm._s(_vm.task.priority))])
+          ]),
+          _vm._v(" "),
+          _c("h5", [
+            _c("strong", [_vm._v("Status : " + _vm._s(_vm.task.status))])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "card-footer bg-transparent border-success text-right "
+        },
+        [
+          _c("strong", [_vm._v("Action :")]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger ",
+              attrs: { type: "button", href: "#" },
+              on: { click: _vm.remove }
+            },
+            [_vm._v("Delete")]
+          )
+        ]
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _c("br")
   ])
 }
 var staticRenderFns = []

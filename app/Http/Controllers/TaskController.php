@@ -46,10 +46,29 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
+        // return $request;
+
+        request()->validate([
+            'title' => 'required|string|min:5|max:10',
+            'description' => 'required|string|min:10',
+            'priority' => 'required',
+            'status' => 'required',
+            'assignedto' => 'required',
+            'duedate' => 'required',
+            
+
+        ]);
+        
         $task=new Task();
-        $task->title=$request->title;
+        $task->name=$request->title;
         $task->priority=$request->priority;
+        $task->description=$request->description;
+        $task->status=$request->status;
+        $task->assignedto=$request->assignedto;
+        $task->duedate=$request->duedate;
         $task->save();
+     
 
         return response($task->jsonSerialize(), Response::HTTP_CREATED);
     }
@@ -96,7 +115,9 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        Task::destroy($task);
-       return response(null,HttpResponse::HTTP_OK);
+       
+        $task->delete();
+        
+       return response(null, Response::HTTP_OK);
     }
 }

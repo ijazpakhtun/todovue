@@ -31,7 +31,11 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {},
+  "dependencies": {
+    "vue-loading-overlay": "^4.0.4",
+    "vue-simple-spinner": "^1.2.10",
+    "vuelidate": "^0.7.6"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
